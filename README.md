@@ -4,8 +4,8 @@ An in-memory Python console-based todo application built following spec-driven d
 
 ## Project Status
 - Phase: I (The Evolution of Todo)
-- Status: Implementation Plan Approved (v0001)
-- Next: Code Implementation
+- Status: Implementation Complete (v0.1.0)
+- Next: Testing & Enhancement
 
 ## Technology Stack
 - Python 3.13+
@@ -44,18 +44,40 @@ See `CONSTITUTION.md` for complete project principles and standards.
 
 ### Prerequisites
 - Python 3.13 or higher
-- UV package manager
+- UV package manager (optional but recommended)
 
-### Installation
+### Running the Application
 ```bash
-# Create virtual environment with UV
-uv venv
+# Run directly with Python
+python main.py
 
-# Activate virtual environment
-# On Windows:
-.venv\Scripts\activate
-# On Unix/macOS:
-source .venv/bin/activate
+# Or with UV (if using virtual environment)
+uv venv
+# On Windows: .venv\Scripts\activate
+# On Unix/macOS: source .venv/bin/activate
+python main.py
+```
+
+### Usage Examples
+```
+> add Buy groceries Get milk and eggs
+✓ Task added successfully!
+
+> list
+ID    Status   Title                          Description
+======================================================
+1     [ ]      Buy                            groceries...
+======================================================
+
+> complete 1
+✓ Task #1 marked as completed!
+
+> delete 1
+Delete task 'Buy'? (y/n): y
+✓ Task #1 deleted successfully!
+
+> quit
+Thank you for using Todo App!
 ```
 
 ## Features (v0001)
@@ -73,11 +95,12 @@ See `PLAN.md` for complete implementation details:
 - **CLI**: Command-based interface with input validation
 - **Entry Point**: main.py for running the app
 
-## Next Steps
-1. ~~Create feature specifications~~ ✓ Complete
-2. ~~Design implementation plan~~ ✓ Complete
-3. Build core todo functionality
-4. Add tests
+## Development Progress
+1. ~~Create feature specifications~~ ✓ Complete (v0001)
+2. ~~Design implementation plan~~ ✓ Complete (v0001)
+3. ~~Build core todo functionality~~ ✓ Complete (v0.1.0)
+4. Add unit tests (Future)
+5. Add Phase II features (Future)
 
 ## License
 TBD
