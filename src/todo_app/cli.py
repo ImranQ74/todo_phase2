@@ -116,7 +116,7 @@ class CLI:
 
         try:
             task = self.manager.add_task(title, description)
-            print(f"\n✓ Task added successfully!")
+            print(f"\n[OK] Task added successfully!")
             print(f"  ID: {task.id}")
             print(f"  Title: {task.title}")
             if task.description:
@@ -184,7 +184,7 @@ class CLI:
                 return
 
             self.manager.update_task(task_id, title_to_update, desc_to_update)
-            print(f"\n✓ Task #{task_id} updated successfully!")
+            print(f"\n[OK] Task #{task_id} updated successfully!")
 
         except TaskNotFoundError as e:
             print(f"Error: {e}")
@@ -216,7 +216,7 @@ class CLI:
 
             if confirm in ("y", "yes"):
                 self.manager.delete_task(task_id)
-                print(f"\n✓ Task #{task_id} deleted successfully!")
+                print(f"\n[OK] Task #{task_id} deleted successfully!")
             else:
                 print("\nDeletion cancelled.")
 
@@ -244,7 +244,7 @@ class CLI:
         try:
             task = self.manager.toggle_complete(task_id)
             status = "completed" if task.completed else "incomplete"
-            print(f"\n✓ Task #{task_id} marked as {status}!")
+            print(f"\n[OK] Task #{task_id} marked as {status}!")
 
         except TaskNotFoundError as e:
             print(f"Error: {e}")
