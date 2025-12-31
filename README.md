@@ -4,8 +4,8 @@ An in-memory Python console-based todo application built following spec-driven d
 
 ## Project Status
 - Phase: I (The Evolution of Todo)
-- Status: Specification Approved (v0001)
-- Next: Implementation Planning
+- Status: Implementation Plan Approved (v0001)
+- Next: Code Implementation
 
 ## Technology Stack
 - Python 3.13+
@@ -17,9 +17,14 @@ An in-memory Python console-based todo application built following spec-driven d
 todo-app/
 ├── src/
 │   └── todo_app/
-│       └── __init__.py
+│       ├── __init__.py
+│       ├── models.py       # Task dataclass
+│       ├── manager.py      # TodoManager
+│       └── cli.py          # CLI interface
+├── main.py                 # Entry point
 ├── CONSTITUTION.md
 ├── SPECIFICATION.md
+├── PLAN.md
 ├── README.md
 ├── pyproject.toml
 └── .python-version
@@ -61,9 +66,16 @@ See `SPECIFICATION.md` for complete feature details:
 4. Delete Task (remove by ID)
 5. Mark as Complete (toggle completion status)
 
+## Architecture (v0001)
+See `PLAN.md` for complete implementation details:
+- **Models**: Task dataclass (id, title, description, completed)
+- **Manager**: TodoManager for CRUD operations
+- **CLI**: Command-based interface with input validation
+- **Entry Point**: main.py for running the app
+
 ## Next Steps
 1. ~~Create feature specifications~~ ✓ Complete
-2. Design implementation plan
+2. ~~Design implementation plan~~ ✓ Complete
 3. Build core todo functionality
 4. Add tests
 
