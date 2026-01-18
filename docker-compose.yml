@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # Backend API Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: todo-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_ALGORITHM=${BETTER_AUTH_ALGORITHM:-HS256}
+      - TODO_HOST=0.0.0.0
+      - TODO_PORT=8000
+      - TODO_DEBUG=false
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/.venv
+    depends_on:
+      - db
+    networks:
+      - todo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Service (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: todo-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=http://localhost:3000
+    env_file:
+      - ./frontend/.env.local
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  # Database Service (PostgreSQL - Optional, for local dev)
+  # Uncomment if you want to use a local PostgreSQL instance
+  # instead of Neon Serverless
+  db:
+    image: postgres:15-alpine
+    container_name: todo-db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-todo_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-todo_password}
+      - POSTGRES_DB=${POSTGRES_DB:-todo_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - todo-network
+    restart: unless-stopped
+    profiles:
+      - with-db
+
+  # Nginx Reverse Proxy (Optional - for production-like setup)
+  # Uncomment if you want to use nginx as a reverse proxy
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: todo-nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #     - ./ssl:/etc/nginx/ssl
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #   networks:
+  #     - todo-network
+  #   restart: unless-stopped
+  #   profiles:
+  #     - with-nginx
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  todo-network:
+    driver: bridge

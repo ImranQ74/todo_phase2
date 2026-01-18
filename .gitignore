@@ -34,3 +34,24 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Next.js
+.next/
+out/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# Docker
+postgres_data/
+
+# Claude
+.claude/
