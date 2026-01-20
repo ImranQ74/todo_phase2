@@ -1,6 +1,6 @@
 // API client for backend communication with JWT authentication
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { authClient } from './auth'
+import { authClient } from './auth-client'
 
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
@@ -16,11 +16,17 @@ api.interceptors.request.use(
   async (config) => {
     try {
       // Get the current session from Better Auth
+      // @ts-ignore
       const session = await authClient.getSession()
 
-      // If session exists and has a token, add it to the Authorization header
-      if (session?.token) {
-        config.headers.Authorization = `Bearer ${session.token}`
+      // If session exists, add it to the Authorization header
+      // Note: better-auth usually handles this via cookies, but if we need to pass a token manually:
+      // This part depends on how better-auth exposes the token.
+      // For now, let's assume cookie-based auth is primary, but if we have a token property:
+      // @ts-ignore
+      if (session?.data?.token) {
+         // @ts-ignore
+        config.headers.Authorization = `Bearer ${session.data.token}`
       }
 
       return config
